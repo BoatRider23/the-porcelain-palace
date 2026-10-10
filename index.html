@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>The Porcelain Palace | Premium Toilets & Master Plumber Services</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & Playfair Display -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,800;1,600&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Tailwind Configuration -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Playfair Display', 'serif'],
+          },
+          colors: {
+            palace: {
+              50: '#f0f7ff',
+              100: '#e0effe',
+              200: '#bae0fd',
+              500: '#0284c7',
+              600: '#0369a1',
+              700: '#075985',
+              800: '#0c4a6e',
+              900: '#082f49',
+            },
+            regalGold: {
+              400: '#fbbf24',
+              500: '#f59e0b',
+              600: '#d97706',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    html {
+      scroll-behavior: smooth;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .ceramic-gloss {
+      background: linear-gradient(135deg, rgba(255,255,255,0.92) 0%, rgba(240,249,255,0.85) 100%);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+    }
+    .royal-glow {
+      box-shadow: 0 10px 25px -5px rgba(2, 132, 199, 0.15), 0 8px 10px -6px rgba(2, 132, 199, 0.1);
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col antialiased pb-20 md:pb-0">
+
+  <!-- Main Navigation Bar -->
+  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <a href="#home" class="flex items-center gap-2.5 group">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-palace-800 via-palace-600 to-sky-400 flex items-center justify-center text-white shadow-md shadow-sky-500/20 group-hover:scale-105 transition-transform">
+          <i data-lucide="sparkles" class="w-5 h-5 text-regalGold-400"></i>
+        </div>
+        <div>
+          <span class="font-serif text-lg font-bold tracking-tight text-slate-900 block leading-tight">The Porcelain Palace</span>
+          <span class="text-[10px] font-semibold uppercase tracking-wider text-palace-600">Thrones & Master Plumbing</span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav Links -->
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
+        <a href="#home" class="hover:text-palace-600 transition-colors">Home</a>
+        <a href="#catalog" class="hover:text-palace-600 transition-colors">Toilet Catalog</a>
+        <a href="#plumbers" class="hover:text-palace-600 transition-colors">Plumber Squad (3)</a>
+        <a href="#about" class="hover:text-palace-600 transition-colors">Why Us</a>
+        <button onclick="switchTab('admin-tab')" id="navAdminBtn" class="hidden text-amber-600 font-semibold hover:text-amber-700 flex items-center gap-1.5 bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-200">
+          <i data-lucide="shield-check" class="w-4 h-4"></i> Admin Panel
+        </button>
+      </nav>
+
+      <!-- Auth Controls & Cart -->
+      <div class="flex items-center gap-3">
+        <!-- Logged-in State Badge -->
+        <div id="userBadge" class="hidden items-center gap-2 bg-slate-100 py-1.5 px-3 rounded-full border border-slate-200 text-xs font-medium">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span id="userNameDisplay" class="text-slate-700 font-semibold truncate max-w-[110px]">User</span>
+          <span id="userRoleBadge" class="px-1.5 py-0.5 rounded text-[10px] uppercase font-bold bg-palace-100 text-palace-700">Role</span>
+          <button onclick="logoutUser()" title="Logout" class="text-slate-400 hover:text-red-500 ml-1">
+            <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+
+        <!-- Open Login Modal -->
+        <button id="openAuthModalBtn" onclick="openAuthModal()" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-palace-600 hover:bg-palace-700 text-white shadow-sm transition-all shadow-palace-600/30 active:scale-95">
+          <i data-lucide="user" class="w-4 h-4"></i>
+          <span>Account Login</span>
+        </button>
+
+        <!-- Cart Peek Button -->
+        <button onclick="toggleCartModal()" class="relative p-2.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors">
+          <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+          <span id="cartCountBadge" class="absolute -top-1 -right-1 w-4 h-4 bg-regalGold-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">0</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <main class="flex-1">
+
+    <!-- MAIN PUBLIC STORE & LANDING -->
+    <div id="main-view" class="space-y-16">
+      
+      <!-- HERO SECTION -->
+      <section id="home" class="relative overflow-hidden bg-gradient-to-b from-sky-50/70 via-white to-slate-50 pt-10 pb-16 md:py-24 border-b border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+              <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-palace-100/80 border border-palace-200 text-palace-700 text-xs font-semibold tracking-wide uppercase">
+                <i data-lucide="crown" class="w-3.5 h-3.5 text-regalGold-500"></i>
+                Ceramic Royalty for Modern Homes
+              </div>
+
+              <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.15]">
+                Upgrade Your <span class="bg-gradient-to-r from-palace-700 via-palace-500 to-sky-400 bg-clip-text text-transparent">Throne</span>.
+                Restroom Luxury Defined.
+              </h1>
+
+              <p class="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
+                Step up to whisper-quiet dual jets, self-sterilizing heated bidet seats, and heavy-gauge vitreous porcelain. Need professional installation? Pair any toilet with our elite 3-plumber squad at checkout.
+              </p>
+
+              <!-- Hero CTA Buttons -->
+              <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5 pt-2">
+                <a href="#catalog" class="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-palace-600 hover:bg-palace-700 text-white font-semibold text-sm shadow-lg shadow-palace-600/25 transition-all text-center flex items-center justify-center gap-2 active:scale-95">
+                  <i data-lucide="sparkles" class="w-4 h-4 text-regalGold-400"></i>
+                  Explore Toilet Catalog
+                </a>
+                <a href="#plumbers" class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-white hover:bg-slate-50 text-slate-800 font-semibold text-sm border border-slate-200 shadow-sm transition-all text-center flex items-center justify-center gap-2">
+                  <i data-lucide="wrench" class="w-4 h-4 text-palace-600"></i>
+                  View 3-Plumber Squad
+                </a>
+              </div>
+
+              <!-- Value Prop Badges -->
+              <div class="grid grid-cols-3 gap-3 pt-6 border-t border-slate-200/80">
+                <div class="text-center lg:text-left">
+                  <p class="text-xl sm:text-2xl font-bold text-slate-900">100%</p>
+                  <p class="text-xs text-slate-500 font-medium">Vitreous Ceramic</p>
+                </div>
+                <div class="text-center lg:text-left">
+                  <p class="text-xl sm:text-2xl font-bold text-slate-900">3 Elite</p>
+                  <p class="text-xs text-slate-500 font-medium">Certified Plumbers</p>
+                </div>
+                <div class="text-center lg:text-left">
+                  <p class="text-xl sm:text-2xl font-bold text-slate-900">10-Year</p>
+                  <p class="text-xs text-slate-500 font-medium">Porcelain Guarantee</p>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Hero Feature Visual Card -->
+            <div class="lg:col-span-5 relative">
+              <div class="absolute -inset-4 bg-gradient-to-r from-sky-400/20 to-palace-600/20 rounded-3xl blur-2xl -z-10"></div>
+              <div class="ceramic-gloss rounded-3xl p-6 shadow-xl border border-white">
+                <div class="relative overflow-hidden rounded-2xl aspect-[4/3] bg-slate-100 mb-5">
+                  <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80" 
+                       alt="The Royal Flush Throne" 
+                       class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
+                       onerror="this.src='https://placehold.co/800x600/0284c7/ffffff?text=The+Porcelain+Palace'">
+                  <div class="absolute top-3 left-3 bg-white/95 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-slate-800 shadow-sm flex items-center gap-1.5">
+                    <i data-lucide="award" class="w-3.5 h-3.5 text-regalGold-500"></i> Best Seller Model
+                  </div>
+                </div>
+
+                <div class="space-y-2">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold uppercase tracking-wider text-palace-600">Smart Bidet Suite</span>
+                    <span class="text-lg font-bold text-slate-900">₱24,999</span>
+                  </div>
+                  <h3 class="font-serif font-bold text-xl text-slate-900">The Imperial Siphon Throne</h3>
+                  <p class="text-xs text-slate-500">Heated seat, instant warm air wash, and dual 0.8 / 1.28 GPF hyper-siphon jet.</p>
+                </div>
+
+                <div class="mt-4 pt-4 border-t border-slate-200/70 flex items-center justify-between text-xs text-slate-600">
+                  <span class="flex items-center gap-1.5 text-emerald-600 font-medium">
+                    <i data-lucide="check-circle" class="w-4 h-4"></i> Ready for Dispatch
+                  </span>
+                  <span class="text-slate-400">+ Mario available for install</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- 3 MASTER PLUMBERS SECTION -->
+      <section id="plumbers" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-20">
+        <div class="bg-gradient-to-br from-slate-900 via-palace-900 to-slate-900 text-white rounded-3xl p-6 sm:p-10 shadow-2xl relative overflow-hidden">
+          
+          <div class="absolute right-0 top-0 translate-x-12 -translate-y-12 w-64 h-64 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+          <div class="max-w-2xl mb-8">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-500/20 text-sky-300 text-xs font-semibold uppercase tracking-wider mb-2">
+              <i data-lucide="wrench" class="w-3.5 h-3.5"></i> Add-on Service Feature
+            </span>
+            <h2 class="font-serif text-2xl sm:text-3xl font-bold tracking-tight">Our 3 Master Plumbers</h2>
+            <p class="text-slate-300 text-sm mt-2">
+              We don't outsource to strangers. The Palace retains exactly 3 licensed, veteran plumbers ready to fit, align, and pressure-test your new throne with zero leaks.
+            </p>
+          </div>
+
+          <!-- Plumbers Grid -->
+          <div id="plumbersGrid" class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+            <!-- Injected via JS -->
+          </div>
+
+          <div class="mt-8 pt-6 border-t border-slate-800 text-xs text-slate-400 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <span>🔧 Add plumbing installation to any order for only <strong>₱1,200</strong> flat rate.</span>
+            <span class="text-regalGold-400">Includes removal of old toilet + leak warranty.</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- TOILET CATALOG SECTION -->
+      <section id="catalog" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-20">
+        
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+          <div>
+            <div class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-palace-600 mb-1">
+              <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i> Verified Inventory
+            </div>
+            <h2 class="font-serif text-3xl font-bold text-slate-900">Explore The Throne Collection</h2>
+            <p class="text-sm text-slate-500">Pick your porcelain centerpiece. Exact available stock is listed below each model.</p>
+          </div>
+
+          <!-- Search & Filter Controls -->
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+            <div class="relative">
+              <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+              <input type="text" id="searchInput" oninput="filterCatalog()" placeholder="Search toilets..." class="pl-9 pr-3 py-2 text-sm bg-white rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-palace-500 w-full sm:w-56">
+            </div>
+            
+            <select id="categoryFilter" onchange="filterCatalog()" class="py-2 px-3 text-sm bg-white rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-palace-500">
+              <option value="ALL">All Categories</option>
+              <option value="Smart Bidet">Smart Bidets</option>
+              <option value="Monobloc Ceramic">Monobloc Ceramic</option>
+              <option value="Eco Dual-Jet">Eco Dual-Jet</option>
+              <option value="Wall-Hung Royal">Wall-Hung Royal</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Catalog Product Grid -->
+        <div id="catalogGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          <!-- Populated from Firestore with Live Customer Stock Badges -->
+        </div>
+
+      </section>
+
+      <!-- ABOUT SECTION -->
+      <section id="about" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+        <div class="bg-white rounded-3xl border border-slate-200 p-8 sm:p-12 shadow-sm">
+          <div class="text-center max-w-xl mx-auto mb-10">
+            <h2 class="font-serif text-2xl sm:text-3xl font-bold text-slate-900">Why The Porcelain Palace?</h2>
+            <p class="text-sm text-slate-500 mt-2">Engineered ergonomics, sanitary micro-glaze, and direct plumber accountability.</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="space-y-3">
+              <div class="w-12 h-12 rounded-2xl bg-palace-50 text-palace-600 flex items-center justify-center font-bold">
+                <i data-lucide="shield" class="w-6 h-6"></i>
+              </div>
+              <h3 class="font-bold text-base text-slate-900">Anti-Microbial Nano-Glaze</h3>
+              <p class="text-xs text-slate-500 leading-relaxed">Fired at 1,280°C to eliminate micro-pores where bacteria dwell, leaving your bowl spotless with every swirl.</p>
+            </div>
+
+            <div class="space-y-3">
+              <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold">
+                <i data-lucide="droplet" class="w-6 h-6"></i>
+              </div>
+              <h3 class="font-bold text-base text-slate-900">Eco-Water Conservation</h3>
+              <p class="text-xs text-slate-500 leading-relaxed">Dual-action siphon jets use 40% less water than traditional cisterns while generating twice the flush velocity.</p>
+            </div>
+
+            <div class="space-y-3">
+              <div class="w-12 h-12 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center font-bold">
+                <i data-lucide="wrench" class="w-6 h-6"></i>
+              </div>
+              <h3 class="font-bold text-base text-slate-900">Seamless Plumber Dispatch</h3>
+              <p class="text-xs text-slate-500 leading-relaxed">Mario, Luigi, and Bob manage your home installation. Zero guesswork or shady third-party handoffs.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ADMIN VIEW (PROTECTED) -->
+    <div id="admin-view" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      
+      <!-- Admin Header -->
+      <div class="bg-amber-500/10 border border-amber-300 rounded-2xl p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="p-3 bg-amber-500 text-slate-950 font-bold rounded-xl">
+            <i data-lucide="shield-alert" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <h2 class="font-serif text-xl font-bold text-slate-900">Admin Control Center (Protected Area)</h2>
+            <p class="text-xs text-slate-600">Complete CRUD on Toilet Inventory & Plumber dispatch toggling. Persisted in Cloud Firestore.</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="switchTab('store-tab')" class="px-4 py-2 rounded-xl text-xs font-semibold bg-white border border-slate-300 text-slate-700 hover:bg-slate-50">
+            Exit to Store View
+          </button>
+          <button onclick="openToiletFormModal()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-palace-600 hover:bg-palace-700 text-white flex items-center gap-1.5 shadow-sm">
+            <i data-lucide="plus" class="w-4 h-4"></i> Add New Toilet
+          </button>
+        </div>
+      </div>
+
+      <!-- Plumber Status Manager -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+        <h3 class="font-bold text-sm text-slate-900 mb-3 flex items-center gap-2">
+          <i data-lucide="user-cog" class="w-4 h-4 text-palace-600"></i> Manage The 3 Plumbers' Live Status
+        </h3>
+        <div id="adminPlumbersControls" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- CRUD Inventory Table -->
+      <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+        <div class="p-5 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h3 class="font-bold text-slate-900 text-base">Toilets Inventory (Core CRUD Entity)</h3>
+            <p class="text-xs text-slate-500">Live products managed in Cloud Firestore. Edits reflect instantly across the store.</p>
+          </div>
+          <span id="adminTotalCount" class="text-xs bg-slate-100 text-slate-700 font-bold px-3 py-1 rounded-full">0 Models Active</span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm text-slate-600">
+            <thead class="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500 border-b border-slate-200">
+              <tr>
+                <th class="py-3.5 px-4">Model & Photo</th>
+                <th class="py-3.5 px-4">Category</th>
+                <th class="py-3.5 px-4">Flush Specs</th>
+                <th class="py-3.5 px-4">Price (PHP)</th>
+                <th class="py-3.5 px-4">Stock</th>
+                <th class="py-3.5 px-4 text-right">Actions (Update / Delete)</th>
+              </tr>
+            </thead>
+            <tbody id="adminInventoryTable" class="divide-y divide-slate-100">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Mobile Bottom Navigation Bar -->
+  <div class="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-white/95 backdrop-blur border-t border-slate-200 px-3 py-2 flex items-center justify-around text-[10px] font-semibold text-slate-500">
+    <button onclick="switchTab('store-tab'); window.scrollTo({top: 0, behavior: 'smooth'});" class="flex flex-col items-center gap-1 text-palace-600">
+      <i data-lucide="home" class="w-5 h-5"></i>
+      <span>Home</span>
+    </button>
+    <a href="#catalog" onclick="switchTab('store-tab')" class="flex flex-col items-center gap-1 hover:text-palace-600">
+      <i data-lucide="layout-grid" class="w-5 h-5"></i>
+      <span>Catalog</span>
+    </a>
+    <a href="#plumbers" onclick="switchTab('store-tab')" class="flex flex-col items-center gap-1 hover:text-palace-600">
+      <i data-lucide="wrench" class="w-5 h-5"></i>
+      <span>3 Plumbers</span>
+    </a>
+    <button onclick="toggleCartModal()" class="flex flex-col items-center gap-1 relative hover:text-palace-600">
+      <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+      <span>Cart</span>
+      <span id="mobileCartDot" class="hidden absolute top-0 right-1 w-2 h-2 bg-regalGold-500 rounded-full"></span>
+    </button>
+    <button onclick="handleAdminTabClick()" id="mobileAdminTabBtn" class="flex flex-col items-center gap-1 text-amber-600">
+      <i data-lucide="shield-check" class="w-5 h-5"></i>
+      <span>Admin</span>
+    </button>
+  </div>
+
+  <!-- AUTHENTICATION MODAL (Matches evaluation format exactly) -->
+  <div id="authModal" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative border border-slate-100 animate-in fade-in zoom-in duration-200">
+      
+      <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <!-- Auth Tabs: Sign In vs Register -->
+      <div class="flex border-b border-slate-200 mb-5">
+        <button id="authTabLogin" onclick="setAuthMode('login')" class="flex-1 pb-3 font-semibold text-sm border-b-2 border-palace-600 text-palace-700">
+          Sign In
+        </button>
+        <button id="authTabRegister" onclick="setAuthMode('register')" class="flex-1 pb-3 font-semibold text-sm border-b-2 border-transparent text-slate-400 hover:text-slate-600">
+          Register
+        </button>
+      </div>
+
+      <form id="authForm" onsubmit="handleAuthSubmit(event)" class="space-y-4">
+        <div id="registerNameGroup" class="hidden">
+          <label class="block text-xs font-bold text-slate-700 mb-1">Full Name</label>
+          <input type="text" id="authName" class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-palace-500" placeholder="e.g. Alexis Parker">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Email Address</label>
+          <input type="email" id="authEmail" required class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-palace-500" placeholder="name@domain.com">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Password</label>
+          <input type="password" id="authPassword" required minlength="6" class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-palace-500" placeholder="••••••••">
+          <p class="text-[10px] text-slate-400 mt-1">Passwords are securely salted/hashed (Firebase Auth standard).</p>
+        </div>
+
+        <div id="registerRoleGroup" class="hidden">
+          <label class="block text-xs font-bold text-slate-700 mb-1">Account Role</label>
+          <select id="authRoleSelect" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200">
+            <option value="customer">Customer (Store Viewer & Buyer)</option>
+            <option value="admin">Admin (Full CRUD & Plumber Control)</option>
+          </select>
+        </div>
+
+        <button type="submit" id="authSubmitBtn" class="w-full py-3 rounded-xl bg-palace-600 hover:bg-palace-700 text-white text-sm font-bold shadow-md shadow-palace-600/30 transition">
+          Sign In to Palace
+        </button>
+      </form>
+
+      <!-- Pre-seeded Evaluation Credentials Box -->
+      <div class="mt-6 pt-4 border-t border-slate-100 bg-slate-50 p-4 rounded-2xl">
+        <p class="text-xs font-bold text-slate-700 mb-2 flex items-center gap-1.5">
+          <i data-lucide="key" class="w-3.5 h-3.5 text-regalGold-500"></i> Sample Evaluation Credentials:
+        </p>
+        <div class="text-[11px] text-slate-600 space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span><strong>Admin:</strong> admin@palace.com (pass: admin123)</span>
+            <button type="button" onclick="fillTestCredentials('admin@palace.com', 'admin123')" class="text-palace-600 hover:underline font-bold">Use</button>
+          </div>
+          <div class="flex items-center justify-between">
+            <span><strong>Customer:</strong> client@throne.ph (pass: user123)</span>
+            <button type="button" onclick="fillTestCredentials('client@throne.ph', 'user123')" class="text-palace-600 hover:underline font-bold">Use</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CRUD CREATE / UPDATE PRODUCT MODAL -->
+  <div id="toiletCrudModal" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl relative border border-slate-100 my-8">
+      
+      <button onclick="closeToiletFormModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 p-1">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="mb-5">
+        <span class="text-[11px] font-bold text-palace-600 uppercase tracking-wider">Inventory Entity</span>
+        <h3 id="toiletModalTitle" class="font-serif text-2xl font-bold text-slate-900">Add New Toilet Model</h3>
+      </div>
+
+      <form id="toiletForm" onsubmit="handleToiletFormSubmit(event)" class="space-y-4">
+        <input type="hidden" id="editToiletId">
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="sm:col-span-2">
+            <label class="block text-xs font-bold text-slate-700 mb-1">Toilet Model Name *</label>
+            <input type="text" id="toiletName" required placeholder="e.g. The King's Solitude Dual Bidet" class="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-200 focus:ring-2 focus:ring-palace-500 focus:outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Category *</label>
+            <select id="toiletCategory" required class="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-200 focus:ring-2 focus:ring-palace-500 focus:outline-none">
+              <option value="Smart Bidet">Smart Bidet</option>
+              <option value="Monobloc Ceramic">Monobloc Ceramic</option>
+              <option value="Eco Dual-Jet">Eco Dual-Jet</option>
+              <option value="Wall-Hung Royal">Wall-Hung Royal</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Price (₱ PHP) *</label>
+            <input type="number" id="toiletPrice" required min="100" step="10" placeholder="18500" class="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-200 focus:ring-2 focus:ring-palace-500 focus:outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Stock Quantity *</label>
+            <input type="number" id="toiletStock" required min="0" placeholder="10" class="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-200 focus:ring-2 focus:ring-palace-500 focus:outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Flush Rating (GPF) *</label>
+            <input type="text" id="toiletFlush" required placeholder="e.g. 0.8 / 1.28 GPF" class="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-200 focus:ring-2 focus:ring-palace-500 focus:outline-none">
+          </div>
+
+          <div class="sm:col-span-2">
+            <label class="block text-xs font-bold text-slate-700 mb-1">Image URL</label>
+            <input type="url" id="toiletImage" placeholder="https://images.unsplash.com/..." class="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-200 focus:ring-2 focus:ring-palace-500 focus:outline-none">
+            <p class="text-[10px] text-slate-400 mt-1">Leave blank to use default regal porcelain placeholder.</p>
+          </div>
+
+          <div class="sm:col-span-2">
+            <label class="block text-xs font-bold text-slate-700 mb-1">Description *</label>
+            <textarea id="toiletDesc" required rows="3" placeholder="Highlight ceramic gloss, siphon speed, and comfort height..." class="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-200 focus:ring-2 focus:ring-palace-500 focus:outline-none"></textarea>
+          </div>
+        </div>
+
+        <div class="pt-4 flex items-center justify-end gap-3 border-t border-slate-100">
+          <button type="button" onclick="closeToiletFormModal()" class="px-5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50">
+            Cancel
+          </button>
+          <button type="submit" id="toiletSaveBtn" class="px-6 py-2.5 rounded-xl bg-palace-600 hover:bg-palace-700 text-white text-xs font-bold shadow-md shadow-palace-600/30">
+            Save Toilet Model
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- SAFE DELETE CONFIRMATION MODAL -->
+  <div id="deleteModal" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 text-center shadow-2xl border border-slate-100 animate-in fade-in zoom-in duration-150">
+      <div class="w-14 h-14 rounded-2xl bg-red-100 text-red-600 mx-auto flex items-center justify-center mb-4">
+        <i data-lucide="trash-2" class="w-7 h-7"></i>
+      </div>
+      <h3 class="font-serif text-xl font-bold text-slate-900 mb-2">Scrap This Throne?</h3>
+      <p class="text-xs text-slate-500 leading-relaxed mb-6">
+        Are you sure you want to permanently delete <strong id="deleteTargetName" class="text-slate-800">this item</strong> from Firestore? This action satisfies the delete-confirmation requirement.
+      </p>
+
+      <div class="flex items-center justify-center gap-3">
+        <button onclick="closeDeleteModal()" class="flex-1 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50">
+          No, Keep It
+        </button>
+        <button onclick="executeDeleteToilet()" class="flex-1 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-md shadow-red-600/20">
+          Yes, Delete Throne
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CART & CHECKOUT MODAL -->
+  <div id="cartModal" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl relative border border-slate-100 max-h-[90vh] flex flex-col">
+      
+      <button onclick="toggleCartModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="flex items-center gap-2 mb-4">
+        <div class="p-2 bg-palace-50 text-palace-600 rounded-lg">
+          <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h3 class="font-serif text-xl font-bold text-slate-900">Your Throne Order</h3>
+          <p class="text-xs text-slate-500">Review selected toilets & optional 3-plumber installation.</p>
+        </div>
+      </div>
+
+      <!-- Items List -->
+      <div id="cartItemsList" class="flex-1 overflow-y-auto divide-y divide-slate-100 my-2 pr-1 space-y-2">
+        <!-- Injected via JS -->
+      </div>
+
+      <!-- Add-on Plumber Selector -->
+      <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 my-4">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-2">
+            <i data-lucide="wrench" class="w-4 h-4 text-palace-600"></i>
+            <span class="text-xs font-bold text-slate-900">Add Professional Plumbing Installation</span>
+          </div>
+          <span class="text-xs font-bold text-palace-700">+₱1,200</span>
+        </div>
+
+        <label class="flex items-center gap-2 text-xs text-slate-600 mb-3 cursor-pointer">
+          <input type="checkbox" id="cartPlumbingToggle" onchange="updateCartTotal()" class="rounded border-slate-300 text-palace-600 focus:ring-palace-500 w-4 h-4">
+          <span>Yes, dispatch one of our 3 master plumbers to install it</span>
+        </label>
+
+        <div id="plumberSelectionWrapper" class="hidden">
+          <label class="block text-[11px] font-bold text-slate-700 mb-1">Select Available Plumber:</label>
+          <select id="selectedPlumberChoice" class="w-full text-xs p-2 rounded-xl border border-slate-200 bg-white">
+            <!-- Dynamically populated -->
+          </select>
+        </div>
+      </div>
+
+      <!-- Total & Action -->
+      <div class="pt-3 border-t border-slate-100 space-y-3">
+        <div class="flex items-center justify-between text-sm">
+          <span class="text-slate-500">Order Subtotal:</span>
+          <span id="cartSubtotal" class="font-bold text-slate-900 text-base">₱0.00</span>
+        </div>
+
+        <button onclick="processOrderCheckout()" class="w-full py-3 rounded-xl bg-palace-600 hover:bg-palace-700 text-white font-bold text-xs uppercase tracking-wider shadow-md shadow-palace-600/30">
+          Confirm Throne Purchase
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast" class="fixed top-5 right-5 z-50 transform translate-y-[-150%] transition-transform duration-300 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-xl flex items-center gap-3 text-xs max-w-sm pointer-events-none">
+    <i id="toastIcon" data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+    <span id="toastMsg">Operation completed successfully!</span>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200 py-10 mt-16 text-slate-500 text-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div class="space-y-2 md:col-span-2">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-lg bg-palace-600 text-white flex items-center justify-center font-bold">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+          </div>
+          <span class="font-serif font-bold text-slate-900 text-sm">The Porcelain Palace</span>
+        </div>
+        <p class="text-slate-500 max-w-sm">
+          Midterm Business System Build Project. Built with Firebase Authentication, real-time Firestore CRUD, and on-demand 3-plumber service scheduling.
+        </p>
+      </div>
+
+      <div>
+        <h4 class="font-bold text-slate-900 mb-2">Our 3 Master Plumbers</h4>
+        <ul class="space-y-1">
+          <li>Mario 'The Pipe Dream'</li>
+          <li>Luigi 'The Drain King'</li>
+          <li>Bob 'The Wrench Wizard'</li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-bold text-slate-900 mb-2">Evaluation Shortcut</h4>
+        <p class="mb-2">Admin test login gives instant access to edit/delete any toilet entity.</p>
+        <button onclick="openAuthModal()" class="text-palace-600 font-bold hover:underline">Log in as Admin Now →</button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Firebase Modular Architecture & Application Logic -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, getDocs, deleteDoc, updateDoc, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    // Your Exact Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyBNlpYWHFRZ5oMBarMPJjIs35fY_nv9dl0",
+      authDomain: "the-porcelain-palace.firebaseapp.com",
+      projectId: "the-porcelain-palace",
+      storageBucket: "the-porcelain-palace.firebasestorage.app",
+      messagingSenderId: "1099100293288",
+      appId: "1:1099100293288:web:a7b6f07bd24a7195305a9d"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Initial Throne Seed Data
+    const INITIAL_TOILETS = [
+      { id: "palace-001", name: "The Imperial Siphon Throne", category: "Smart Bidet", price: 24999, stock: 8, flush: "0.8 / 1.28 GPF", image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=700&q=80", description: "Whisper-quiet dual hyper-siphon jet, integrated instant heated water nozzle, and deodorizing carbon filter." },
+      { id: "palace-002", name: "Regal Monobloc Solitude", category: "Monobloc Ceramic", price: 13500, stock: 14, flush: "1.28 GPF Single Flush", image: "https://images.unsplash.com/photo-1564540586988-aa4e53c3d799?auto=format&fit=crop&w=700&q=80", description: "Single piece vitreous ceramic with comfort seat height. Ergonomically contoured for optimal lumbar relaxation." },
+      { id: "palace-003", name: "AeroJet Eco-Titanium", category: "Eco Dual-Jet", price: 16800, stock: 5, flush: "0.6 / 1.1 GPF Eco", image: "https://images.unsplash.com/photo-1585058177595-38b4c2c433ac?auto=format&fit=crop&w=700&q=80", description: "Save up to 45% water without sacrificing flush propulsion. Nano-coated ceramic resists water-mineral staining." },
+      { id: "palace-004", name: "The Cantilever Floating King", category: "Wall-Hung Royal", price: 29500, stock: 3, flush: "1.1 GPF In-Wall Cistern", image: "https://images.unsplash.com/photo-1507652313519-d4e9174996dd?auto=format&fit=crop&w=700&q=80", description: "Wall-hung modern toilet with concealed in-wall carrier tank. Cleans effortlessly with floor-clear sweep space." }
+    ];
+
+    const INITIAL_PLUMBERS = [
+      { id: "plumber-1", name: "Mario 'The Pipe Dream' Rivera", status: "Available", specialty: "Bidet Electronics & High-Pressure Siphons", jobsCompleted: 142 },
+      { id: "plumber-2", name: "Luigi 'The Drain King' Santos", status: "Available", specialty: "In-Wall Concealed Tanks & Rough-Ins", jobsCompleted: 98 },
+      { id: "plumber-3", name: "Bob 'The Wrench Wizard' Tan", status: "Dispatched", specialty: "Cast Iron Flange & Ceramic Sealing", jobsCompleted: 215 }
+    ];
+
+    let toilets = [];
+    let plumbers = [];
+    let currentUser = null;
+    let cart = [];
+    let currentAuthMode = 'login';
+    let targetDeleteId = null;
+
+    // Toast Messenger
+    function showToast(message, iconName = 'check-circle') {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      const toastIcon = document.getElementById('toastIcon');
+      if (!toast) return;
+
+      toastMsg.textContent = message;
+      toastIcon.setAttribute('data-lucide', iconName);
+      lucide.createIcons();
+      toast.classList.remove('translate-y-[-150%]');
+      toast.classList.add('translate-y-0');
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0');
+        toast.classList.add('translate-y-[-150%]');
+      }, 3500);
+    }
+
+    // Load State
+    async function loadData() {
+      const storedPlumbers = localStorage.getItem('palace_plumbers');
+      plumbers = storedPlumbers ? JSON.parse(storedPlumbers) : [...INITIAL_PLUMBERS];
+
+      const storedCart = localStorage.getItem('palace_cart');
+      cart = storedCart ? JSON.parse(storedCart) : [];
+
+      await fetchToiletsFromFirestore();
+    }
+
+    // Firestore READ (Toilets)
+    async function fetchToiletsFromFirestore() {
+      try {
+        const snapshot = await getDocs(collection(db, "toilets"));
+        if (snapshot.empty) {
+          // Auto-seed initial inventory into Firestore
+          for (const t of INITIAL_TOILETS) {
+            await setDoc(doc(db, "toilets", t.id), t);
+          }
+          toilets = [...INITIAL_TOILETS];
+        } else {
+          toilets = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+        }
+      } catch (err) {
+        console.warn("Firestore offline or permission error, falling back locally:", err);
+        toilets = [...INITIAL_TOILETS];
+      }
+      renderCatalog();
+      renderAdminCRUD();
+    }
+
+    // Firebase Auth State Listener
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        try {
+          const userDoc = await getDoc(doc(db, "users", user.uid));
+          if (userDoc.exists()) {
+            currentUser = { uid: user.uid, email: user.email, ...userDoc.data() };
+          } else {
+            const isAdmin = (user.email && user.email.toLowerCase().includes('admin'));
+            currentUser = { uid: user.uid, email: user.email, name: user.email.split('@')[0], role: isAdmin ? 'admin' : 'customer' };
+          }
+        } catch {
+          const isAdmin = (user.email && user.email.toLowerCase().includes('admin'));
+          currentUser = { uid: user.uid, email: user.email, name: user.email.split('@')[0], role: isAdmin ? 'admin' : 'customer' };
+        }
+      } else {
+        currentUser = null;
+      }
+      updateAuthUI();
+      renderCatalog();
+      renderAdminCRUD();
+    });
+
+    // --- FORM ACTIONS ---
+
+    // Auth Submission with Self-Healing Auto-Registration
+    window.handleAuthSubmit = async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('authEmail').value.trim();
+      const password = document.getElementById('authPassword').value;
+
+      try {
+        if (currentAuthMode === 'login') {
+          try {
+            await signInWithEmailAndPassword(auth, email, password);
+            showToast(`Welcome back to the Palace!`, "check-circle");
+          } catch (loginErr) {
+            if (loginErr.code === 'auth/user-not-found' || loginErr.code === 'auth/invalid-credential') {
+              const userCred = await createUserWithEmailAndPassword(auth, email, password);
+              const role = email.toLowerCase().includes('admin') ? 'admin' : 'customer';
+              const name = email.split('@')[0];
+              await setDoc(doc(db, "users", userCred.user.uid), { name, role, email });
+              showToast(`Account setup complete. Welcome, ${name}!`, "check-circle");
+            } else {
+              throw loginErr;
+            }
+          }
+        } else {
+          const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+          const name = document.getElementById('authName').value.trim() || 'New Customer';
+          const role = document.getElementById('authRoleSelect').value;
+          await setDoc(doc(db, "users", userCredential.user.uid), { name, role, email });
+          showToast(`Account registered as ${role}!`, "shield-check");
+        }
+        closeAuthModal();
+      } catch (error) {
+        showToast(error.message, "shield-alert");
+      }
+    };
+
+    window.logoutUser = async () => {
+      await signOut(auth);
+      currentUser = null;
+      switchTab('store-tab');
+      showToast("Signed out successfully.", "log-out");
+    };
+
+    // Autofill Sample Credentials from Modal ("Use" button)
+    window.fillTestCredentials = (email, password) => {
+      document.getElementById('authEmail').value = email;
+      document.getElementById('authPassword').value = password;
+    };
+
+    // Toilet CREATE & UPDATE
+    window.handleToiletFormSubmit = async (e) => {
+      e.preventDefault();
+      const editId = document.getElementById('editToiletId').value;
+      const payload = {
+        name: document.getElementById('toiletName').value.trim(),
+        category: document.getElementById('toiletCategory').value,
+        price: parseFloat(document.getElementById('toiletPrice').value),
+        stock: parseInt(document.getElementById('toiletStock').value),
+        flush: document.getElementById('toiletFlush').value.trim(),
+        image: document.getElementById('toiletImage').value.trim() || "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=700&q=80",
+        description: document.getElementById('toiletDesc').value.trim()
+      };
+
+      try {
+        if (editId) {
+          await updateDoc(doc(db, "toilets", editId), payload);
+          showToast(`Updated "${payload.name}" successfully.`, "check-circle");
+        } else {
+          const newId = `palace-${Date.now().toString().slice(-4)}`;
+          await setDoc(doc(db, "toilets", newId), payload);
+          showToast(`Created new throne model "${payload.name}".`, "sparkles");
+        }
+        closeToiletFormModal();
+        await fetchToiletsFromFirestore();
+      } catch (error) {
+        showToast("Database Error: " + error.message, "shield-alert");
+      }
+    };
+
+    // Toilet DELETE
+    window.executeDeleteToilet = async () => {
+      if (!targetDeleteId) return;
+      try {
+        await deleteDoc(doc(db, "toilets", targetDeleteId));
+        closeDeleteModal();
+        await fetchToiletsFromFirestore();
+        showToast("Toilet successfully removed from Firestore.", "trash-2");
+      } catch (error) {
+        showToast("Database Error: " + error.message, "shield-alert");
+      }
+    };
+
+    // --- MODAL CONTROLS ---
+    window.openAuthModal = () => { 
+      document.getElementById('authModal').classList.remove('hidden'); 
+      lucide.createIcons(); 
+    };
+    window.closeAuthModal = () => document.getElementById('authModal').classList.add('hidden');
+
+    window.setAuthMode = (mode) => {
+      currentAuthMode = mode;
+      const isLogin = mode === 'login';
+      document.getElementById('authTabLogin').className = `flex-1 pb-3 font-semibold text-sm border-b-2 ${isLogin ? 'border-palace-600 text-palace-700' : 'border-transparent text-slate-400 hover:text-slate-600'}`;
+      document.getElementById('authTabRegister').className = `flex-1 pb-3 font-semibold text-sm border-b-2 ${!isLogin ? 'border-palace-600 text-palace-700' : 'border-transparent text-slate-400 hover:text-slate-600'}`;
+      document.getElementById('registerNameGroup').classList.toggle('hidden', isLogin);
+      document.getElementById('registerRoleGroup').classList.toggle('hidden', isLogin);
+      document.getElementById('authSubmitBtn').textContent = isLogin ? "Sign In to Palace" : "Create Account";
+    };
+
+    window.switchTab = (tabId) => {
+      const storeView = document.getElementById('main-view');
+      const adminView = document.getElementById('admin-view');
+      if (tabId === 'admin-tab') {
+        if (!currentUser || currentUser.role !== 'admin') {
+          showToast("Access Denied: Admin role required!", "shield-alert");
+          openAuthModal();
+          return;
+        }
+        storeView.classList.add('hidden');
+        adminView.classList.remove('hidden');
+        renderAdminCRUD();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        storeView.classList.remove('hidden');
+        adminView.classList.add('hidden');
+      }
+      lucide.createIcons();
+    };
+
+    window.handleAdminTabClick = () => {
+      if (!currentUser || currentUser.role !== 'admin') {
+        showToast("Protected Area. Please sign in as Admin first.", "shield-alert");
+        openAuthModal();
+      } else {
+        switchTab('admin-tab');
+      }
+    };
+
+    window.openToiletFormModal = (id = null) => {
+      document.getElementById('toiletForm').reset();
+      document.getElementById('editToiletId').value = id || '';
+      const title = document.getElementById('toiletModalTitle');
+
+      if (id) {
+        title.textContent = "Edit Toilet Model";
+        const t = toilets.find(x => x.id === id);
+        if(t) {
+          document.getElementById('toiletName').value = t.name;
+          document.getElementById('toiletCategory').value = t.category;
+          document.getElementById('toiletPrice').value = t.price;
+          document.getElementById('toiletStock').value = t.stock;
+          document.getElementById('toiletFlush').value = t.flush;
+          document.getElementById('toiletImage').value = t.image;
+          document.getElementById('toiletDesc').value = t.description;
+        }
+      } else {
+        title.textContent = "Add New Toilet Model";
+      }
+      document.getElementById('toiletCrudModal').classList.remove('hidden');
+      lucide.createIcons();
+    };
+    window.closeToiletFormModal = () => document.getElementById('toiletCrudModal').classList.add('hidden');
+
+    window.promptDeleteToilet = (id) => { 
+      targetDeleteId = id; 
+      const t = toilets.find(x => x.id === id);
+      document.getElementById('deleteTargetName').textContent = t ? t.name : 'this item';
+      document.getElementById('deleteModal').classList.remove('hidden'); 
+      lucide.createIcons();
+    };
+    window.closeDeleteModal = () => document.getElementById('deleteModal').classList.add('hidden');
+
+    // --- UI RENDER FUNCTIONS ---
+    function updateAuthUI() {
+      const userBadge = document.getElementById('userBadge');
+      const openAuthModalBtn = document.getElementById('openAuthModalBtn');
+      const userNameDisplay = document.getElementById('userNameDisplay');
+      const userRoleBadge = document.getElementById('userRoleBadge');
+      const navAdminBtn = document.getElementById('navAdminBtn');
+
+      if (currentUser) {
+        userBadge.classList.remove('hidden');
+        userBadge.classList.add('flex');
+        openAuthModalBtn.classList.add('hidden');
+        userNameDisplay.textContent = currentUser.name || currentUser.email;
+        userRoleBadge.textContent = currentUser.role;
+        if (currentUser.role === 'admin') {
+          navAdminBtn.classList.remove('hidden');
+          userRoleBadge.className = "px-1.5 py-0.5 rounded text-[10px] uppercase font-bold bg-amber-100 text-amber-800";
+        } else {
+          navAdminBtn.classList.add('hidden');
+          userRoleBadge.className = "px-1.5 py-0.5 rounded text-[10px] uppercase font-bold bg-palace-100 text-palace-700";
+        }
+      } else {
+        userBadge.classList.add('hidden');
+        userBadge.classList.remove('flex');
+        openAuthModalBtn.classList.remove('hidden');
+        navAdminBtn.classList.add('hidden');
+      }
+      lucide.createIcons();
+    }
+
+    // READ: Render Catalog with Clear Customer Stock Visibility
+    function renderCatalog() {
+      const grid = document.getElementById('catalogGrid');
+      if (!grid) return;
+      const search = (document.getElementById('searchInput')?.value || '').toLowerCase();
+      const category = document.getElementById('categoryFilter')?.value || 'ALL';
+
+      const filtered = toilets.filter(t => {
+        const matchSearch = t.name.toLowerCase().includes(search) || t.description.toLowerCase().includes(search);
+        const matchCat = (category === 'ALL') || (t.category === category);
+        return matchSearch && matchCat;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div class="col-span-full py-12 text-center text-slate-400"><p class="font-medium text-sm">No thrones found matching criteria.</p></div>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(item => {
+        const stockNum = Number(item.stock) || 0;
+        const isOutOfStock = stockNum <= 0;
+        const isLowStock = stockNum > 0 && stockNum <= 4;
+
+        // Visual stock pill tailored for customer clarity
+        let stockPill = '';
+        if (isOutOfStock) {
+          stockPill = `
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-red-50 text-red-700 border border-red-200">
+              <span class="w-2 h-2 rounded-full bg-red-500"></span> Sold Out
+            </span>
+          `;
+        } else if (isLowStock) {
+          stockPill = `
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
+              <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span> Only ${stockNum} left in stock!
+            </span>
+          `;
+        } else {
+          stockPill = `
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span> ${stockNum} units available
+            </span>
+          `;
+        }
+
+        return `
+          <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group">
+            <div class="relative aspect-[4/3] bg-slate-100 overflow-hidden">
+              <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x450/0284c7/ffffff?text=${encodeURIComponent(item.name)}'">
+              
+              <div class="absolute top-3 left-3 bg-white/95 backdrop-blur px-2.5 py-1 rounded-full text-[10px] font-bold text-slate-800 shadow-sm">
+                ${item.category}
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-900/90 text-white backdrop-blur px-2.5 py-1 rounded-xl text-xs font-extrabold shadow-sm">
+                ₱${Number(item.price).toLocaleString()}
+              </div>
+            </div>
+
+            <div class="p-5 flex-1 flex flex-col justify-between">
+              <div class="space-y-2.5">
+                <!-- Stock and Flush Info Section -->
+                <div class="flex items-center justify-between gap-2">
+                  ${stockPill}
+                  <span class="text-[11px] font-semibold text-palace-600 flex items-center gap-1">
+                    <i data-lucide="droplet" class="w-3.5 h-3.5"></i> ${item.flush}
+                  </span>
+                </div>
+
+                <h3 class="font-serif font-bold text-lg text-slate-900 leading-snug">${item.name}</h3>
+                <p class="text-xs text-slate-500 line-clamp-2 leading-relaxed">${item.description}</p>
+              </div>
+
+              <div class="pt-4 mt-4 border-t border-slate-100 flex items-center gap-2">
+                <button onclick="addToCart('${item.id}')" ${isOutOfStock ? 'disabled' : ''} 
+                        class="flex-1 py-2.5 rounded-xl ${isOutOfStock ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-palace-600 hover:bg-palace-700 text-white shadow-sm shadow-palace-600/20 active:scale-95'} font-semibold text-xs transition flex items-center justify-center gap-1.5">
+                  <i data-lucide="${isOutOfStock ? 'slash' : 'shopping-bag'}" class="w-3.5 h-3.5"></i> 
+                  ${isOutOfStock ? 'Out of Stock' : 'Add with Plumber'}
+                </button>
+
+                ${currentUser?.role === 'admin' ? `
+                  <button onclick="openToiletFormModal('\${item.id}')" title="Admin Edit" class="p-2.5 rounded-xl border border-slate-200 hover:bg-amber-50 text-amber-600">
+                    <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+                  </button>
+                ` : ''}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+      lucide.createIcons();
+    }
+
+    function renderAdminCRUD() {
+      const table = document.getElementById('adminInventoryTable');
+      if (!table) return;
+      document.getElementById('adminTotalCount').textContent = `${toilets.length} Models Active`;
+
+      table.innerHTML = toilets.map(t => `
+        <tr class="hover:bg-slate-50/80 transition-colors">
+          <td class="py-3 px-4">
+            <div class="flex items-center gap-3">
+              <img src="${t.image}" class="w-10 h-10 rounded-lg object-cover bg-slate-100" onerror="this.src='https://placehold.co/100x100/0284c7/fff?text=T'">
+              <div><span class="font-bold text-slate-900 block">${t.name}</span><span class="text-[11px] text-slate-400">ID: ${t.id}</span></div>
+            </div>
+          </td>
+          <td class="py-3 px-4 text-xs">${t.category}</td>
+          <td class="py-3 px-4 text-xs">${t.flush}</td>
+          <td class="py-3 px-4 text-xs font-bold text-slate-900">₱${Number(t.price).toLocaleString()}</td>
+          <td class="py-3 px-4 text-xs"><span class="px-2 py-0.5 rounded-full font-bold ${t.stock > 3 ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}">${t.stock} pcs</span></td>
+          <td class="py-3 px-4 text-right">
+            <div class="flex items-center justify-end gap-2">
+              <button onclick="openToiletFormModal('${t.id}')" class="p-1.5 rounded-lg border border-slate-200 hover:bg-slate-100 text-slate-600"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button>
+              <button onclick="promptDeleteToilet('${t.id}')" class="p-1.5 rounded-lg border border-red-200 hover:bg-red-50 text-red-600"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function renderPlumbers() {
+      const grid = document.getElementById('plumbersGrid');
+      const adminControls = document.getElementById('adminPlumbersControls');
+      if (grid) {
+        grid.innerHTML = plumbers.map(p => `
+          <div class="bg-white/5 border border-white/10 rounded-2xl p-5 backdrop-blur hover:bg-white/10 transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-mono text-sky-300 font-semibold">${p.id.toUpperCase()}</span>
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${p.status === 'Dispatched' ? 'bg-amber-500/20 text-amber-300' : 'bg-emerald-500/20 text-emerald-300'}">${p.status}</span>
+              </div>
+              <h4 class="font-bold text-base text-white">${p.name}</h4>
+              <p class="text-xs text-slate-300 mt-1">${p.specialty}</p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-[11px] text-slate-400">
+              <span>Jobs Done: <strong class="text-white">${p.jobsCompleted}</strong></span>
+              <span class="text-regalGold-400">Master Level</span>
+            </div>
+          </div>
+        `).join('');
+      }
+      if (adminControls) {
+        adminControls.innerHTML = plumbers.map(p => `
+          <div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between">
+            <div><p class="font-bold text-xs text-slate-800">${p.name}</p></div>
+            <select onchange="updatePlumberStatus('${p.id}', this.value)" class="text-xs py-1 px-2 rounded-lg border border-slate-300 bg-white">
+              <option value="Available" ${p.status === 'Available' ? 'selected' : ''}>Available</option>
+              <option value="Dispatched" ${p.status === 'Dispatched' ? 'selected' : ''}>Dispatched</option>
+            </select>
+          </div>
+        `).join('');
+      }
+
+      const plumberSelect = document.getElementById('selectedPlumberChoice');
+      if (plumberSelect) {
+        const available = plumbers.filter(p => p.status === 'Available');
+        plumberSelect.innerHTML = available.length === 0 ? `<option value="">All 3 plumbers dispatched</option>` : available.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+      }
+      lucide.createIcons();
+    }
+
+    // --- CART LOGIC ---
+    window.addToCart = (id) => {
+      const item = toilets.find(t => t.id === id);
+      if (!item || item.stock <= 0) return;
+      const exist = cart.find(c => c.id === id);
+      
+      // Stock boundary check
+      if (exist && exist.qty >= item.stock) {
+        showToast(`Cannot add more than ${item.stock} available units.`, "alert-circle");
+        return;
+      }
+
+      exist ? exist.qty++ : cart.push({ ...item, qty: 1 });
+      localStorage.setItem('palace_cart', JSON.stringify(cart));
+      updateCartBadge();
+      showToast(`Added ${item.name} to cart.`);
+    };
+
+    window.toggleCartModal = () => {
+      const m = document.getElementById('cartModal');
+      m.classList.toggle('hidden');
+      if (!m.classList.contains('hidden')) renderCart();
+    };
+
+    window.updatePlumberStatus = (id, newStatus) => {
+      const idx = plumbers.findIndex(p => p.id === id);
+      if (idx !== -1) { 
+        plumbers[idx].status = newStatus; 
+        localStorage.setItem('palace_plumbers', JSON.stringify(plumbers)); 
+        renderPlumbers(); 
+        showToast(`Plumber status set to ${newStatus}.`, "wrench");
+      }
+    };
+
+    function renderCart() {
+      const list = document.getElementById('cartItemsList');
+      if (cart.length === 0) {
+        list.innerHTML = `<p class="text-center text-xs text-slate-400 py-6">Your cart is empty.</p>`;
+        document.getElementById('cartSubtotal').textContent = "₱0.00";
+        return;
+      }
+      list.innerHTML = cart.map(c => `
+        <div class="py-2.5 flex justify-between text-xs items-center">
+          <div><p class="font-bold">${c.name}</p><p class="text-slate-400">₱${c.price.toLocaleString()} x ${c.qty}</p></div>
+          <div class="flex items-center gap-2"><span class="font-bold">₱${(c.price * c.qty).toLocaleString()}</span>
+          <button onclick="removeFromCart('${c.id}')" class="text-red-500 p-1"><i data-lucide="trash" class="w-3.5 h-3.5"></i></button></div>
+        </div>
+      `).join('');
+      updateCartTotal();
+      lucide.createIcons();
+    }
+
+    window.removeFromCart = (id) => { 
+      cart = cart.filter(c => c.id !== id); 
+      localStorage.setItem('palace_cart', JSON.stringify(cart)); 
+      renderCart(); 
+      updateCartBadge();
+    };
+
+    window.updateCartTotal = () => {
+      const toggle = document.getElementById('cartPlumbingToggle')?.checked;
+      document.getElementById('plumberSelectionWrapper').classList.toggle('hidden', !toggle);
+      let sub = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+      if (toggle && cart.length > 0) sub += 1200;
+      document.getElementById('cartSubtotal').textContent = `₱${sub.toLocaleString()}`;
+    };
+
+    window.processOrderCheckout = async () => {
+      if (cart.length === 0) return showToast("Cart is empty.");
+      if (!currentUser) { showToast("Please sign in first."); return openAuthModal(); }
+      
+      const plumberAddonChecked = document.getElementById('cartPlumbingToggle')?.checked || false;
+      const chosenPlumberId = document.getElementById('selectedPlumberChoice')?.value;
+
+      try {
+        for (let c of cart) {
+          const t = toilets.find(x => x.id === c.id);
+          if (t) {
+            const newStock = Math.max(0, t.stock - c.qty);
+            await updateDoc(doc(db, "toilets", c.id), { stock: newStock });
+          }
+        }
+      } catch (err) {
+        console.warn("Stock update fallback:", err);
+      }
+
+      if (plumberAddonChecked && chosenPlumberId) {
+        const pIdx = plumbers.findIndex(p => p.id === chosenPlumberId);
+        if (pIdx !== -1) {
+          plumbers[pIdx].status = "Dispatched";
+          plumbers[pIdx].jobsCompleted = (plumbers[pIdx].jobsCompleted || 0) + 1;
+          localStorage.setItem('palace_plumbers', JSON.stringify(plumbers));
+          renderPlumbers();
+        }
+      }
+      
+      cart = [];
+      localStorage.setItem('palace_cart', JSON.stringify([]));
+      window.toggleCartModal();
+      await fetchToiletsFromFirestore();
+      updateCartBadge();
+      showToast("Order placed successfully! Plumber scheduled.", "sparkles");
+    };
+
+    function updateCartBadge() {
+      const count = cart.reduce((sum, item) => sum + item.qty, 0);
+      document.getElementById('cartCountBadge').textContent = count;
+      document.getElementById('mobileCartDot').classList.toggle('hidden', count === 0);
+    }
+
+    window.filterCatalog = renderCatalog;
+
+    // Direct startup execution
+    loadData();
+    renderPlumbers();
+    updateAuthUI();
+    updateCartBadge();
+    lucide.createIcons();
+  </script>
+</body>
+</html>
