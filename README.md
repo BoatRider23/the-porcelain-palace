@@ -73,4 +73,4 @@ Visit the deployed application directly: **[https://the-porcelain-palace.onrende
 ### Option B: Run Locally via Git & VS Code
 1. **Clone the repository:**
    ```bash
- git clone https://github.com/BoatRider23/the-porcelain-palace.git
+   git clone [https://github.com/BoatRider23/the-porcelain-palace.git](https://github.com/BoatRider23/the-porcelain-palace.git)
